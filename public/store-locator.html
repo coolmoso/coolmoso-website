@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Locator - LivHeart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header" id="header">
+  <div class="container header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-text">LivHeart</span>
+      <span class="logo-subtitle">リブハート</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav-menu" id="navMenu">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="index.html"><span class="nav-en">HOME</span><span class="nav-sub">ホーム</span></a></li>
+        <li class="nav-item"><a href="brand.html"><span class="nav-en">BRAND</span><span class="nav-sub">Brand Introduction</span></a></li>
+        <li class="nav-item"><a href="products.html"><span class="nav-en">PRODUCTS</span><span class="nav-sub">Product Gallery</span></a></li>
+        <li class="nav-item active"><a href="store-locator.html"><span class="nav-en">STORES</span><span class="nav-sub">Store Locator</span></a></li>
+        <li class="nav-item"><a href="cooperation.html"><span class="nav-en">COOPERATION</span><span class="nav-sub">Business Partners</span></a></li>
+        <li class="nav-item"><a href="news.html"><span class="nav-en">NEWS</span><span class="nav-sub">Latest Updates</span></a></li>
+        <li class="nav-item"><a href="shop.html"><span class="nav-en">SHOP</span><span class="nav-sub">Online Shop</span></a></li>
+        <li class="nav-item"><a href="feedback.html"><span class="nav-en">FEEDBACK</span><span class="nav-sub">Contact Us</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="page-banner animate-on-scroll">
+  <div class="container">
+    <h1 class="page-title">Store Locator</h1>
+    <p class="page-subtitle">店舗検索</p>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> <span>&gt;</span> <span>Store Locator</span>
+    </div>
+  </div>
+</section>
+
+<section class="section store-section">
+  <div class="container">
+
+    <div class="store-search-bar animate-on-scroll">
+      <input type="text" id="store-search" placeholder="Search by city or store name...">
+      <button class="search-btn" aria-label="Search">🔍</button>
+    </div>
+
+    <div class="map-placeholder animate-on-scroll">
+      <div class="map-inner">
+        <span class="map-pin">📍</span>
+        <p class="map-title">Interactive Map</p>
+        <p class="map-subtitle">Select a store below to view location</p>
+      </div>
+    </div>
+
+    <div class="store-grid">
+
+      <div class="store-card animate-on-scroll" data-name="LivHeart Nanjing Flagship Store" data-address="Xinjiekou, Nanjing">
+        <div class="store-icon">📍</div>
+        <h3 class="store-name">LivHeart Nanjing Flagship Store</h3>
+        <p class="store-address">Xinjiekou, Nanjing</p>
+        <p class="store-phone">📞 025-8888-1234</p>
+        <p class="store-hours">🕐 10:00-22:00</p>
+      </div>
+
+      <div class="store-card animate-on-scroll" data-name="LivHeart Shanghai Jing'an Store" data-address="Jing'an District, Shanghai">
+        <div class="store-icon">📍</div>
+        <h3 class="store-name">LivHeart Shanghai Jing'an Store</h3>
+        <p class="store-address">Jing'an District, Shanghai</p>
+        <p class="store-phone">📞 021-6666-5678</p>
+        <p class="store-hours">🕐 10:00-22:00</p>
+      </div>
+
+      <div class="store-card animate-on-scroll" data-name="LivHeart Beijing Sanlitun Store" data-address="Chaoyang District, Beijing">
+        <div class="store-icon">📍</div>
+        <h3 class="store-name">LivHeart Beijing Sanlitun Store</h3>
+        <p class="store-address">Chaoyang District, Beijing</p>
+        <p class="store-phone">📞 010-5555-9012</p>
+        <p class="store-hours">🕐 10:00-21:30</p>
+      </div>
+
+      <div class="store-card animate-on-scroll" data-name="LivHeart Hangzhou Lakeside Store" data-address="West Lake District, Hangzhou">
+        <div class="store-icon">📍</div>
+        <h3 class="store-name">LivHeart Hangzhou Lakeside Store</h3>
+        <p class="store-address">West Lake District, Hangzhou</p>
+        <p class="store-phone">📞 0571-7777-3456</p>
+        <p class="store-hours">🕐 10:00-22:00</p>
+      </div>
+
+      <div class="store-card animate-on-scroll" data-name="LivHeart Chengdu Taikoo Li Store" data-address="Jinjiang District, Chengdu">
+        <div class="store-icon">📍</div>
+        <h3 class="store-name">LivHeart Chengdu Taikoo Li Store</h3>
+        <p class="store-address">Jinjiang District, Chengdu</p>
+        <p class="store-phone">📞 028-8888-7890</p>
+        <p class="store-hours">🕐 10:00-22:00</p>
+      </div>
+
+      <div class="store-card animate-on-scroll" data-name="LivHeart Shenzhen MixC Store" data-address="Nanshan District, Shenzhen">
+        <div class="store-icon">📍</div>
+        <h3 class="store-name">LivHeart Shenzhen MixC Store</h3>
+        <p class="store-address">Nanshan District, Shenzhen</p>
+        <p class="store-phone">📞 0755-9999-2345</p>
+        <p class="store-hours">🕐 10:00-22:00</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">LivHeart</span>
+      <p class="footer-tagline">Soft Living, Happy Heart</p>
+    </div>
+    <div class="footer-links">
+      <ul>
+        <li><a href="brand.html">About Us</a></li>
+        <li><a href="feedback.html">Contact Us</a></li>
+        <li><a href="cooperation.html">Join Us</a></li>
+        <li><a href="store-locator.html">Store Locator</a></li>
+        <li><a href="shop.html">Online Shop</a></li>
+      </ul>
+    </div>
+    <div class="footer-social">
+      <span>Follow Us</span>
+      <div class="social-icons">
+        <a href="#" class="social-icon" title="Weibo">微博</a>
+        <a href="#" class="social-icon" title="WeChat">微信</a>
+        <a href="#" class="social-icon" title="Instagram">Ins</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p>&copy; 2025 LivHeart Inc. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+<script src="js/main.js"></script>
+
+</body>
+</html>
