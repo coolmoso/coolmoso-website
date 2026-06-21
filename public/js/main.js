@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ==========================================================
-     5. PRODUCT CATEGORY FILTER (products.html / shop.html)
+     5. PRODUCT CATEGORY FILTER (products.html)
      ========================================================== */
   function initCategoryFilter() {
     var categories = document.querySelectorAll('.category-item[data-category]');
@@ -188,16 +188,9 @@ document.addEventListener('DOMContentLoaded', function () {
               card.classList.remove('hidden');
             });
           } else {
+            card.style.display = 'none';
             card.classList.add('hidden');
             card.classList.remove('visible');
-            // Hide after transition completes
-            var onEnd = function () {
-              if (card.classList.contains('hidden')) {
-                card.style.display = 'none';
-              }
-              card.removeEventListener('transitionend', onEnd);
-            };
-            card.addEventListener('transitionend', onEnd);
           }
         });
       });
@@ -444,6 +437,96 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ==========================================================
+     12. VIDEO MODAL (products.html)
+     ========================================================== */
+  function initVideoModal() {
+    var modal    = document.getElementById('video-modal');
+    if (!modal) return;
+
+    var player   = modal.querySelector('.video-modal-player');
+    var closeBtn = modal.querySelector('.video-modal-close');
+    var backdrop = modal.querySelector('.video-modal-backdrop');
+
+    document.querySelectorAll('.product-image:has(.product-photo[data-video])').forEach(function (container) {
+      var img = container.querySelector('.product-photo[data-video]');
+      container.style.cursor = 'pointer';
+      container.addEventListener('click', function () {
+        player.src = img.getAttribute('data-video');
+        player.load();
+        modal.classList.add('is-open');
+        document.body.classList.add('no-scroll');
+        player.play().catch(function () {});
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      document.body.classList.remove('no-scroll');
+      player.pause();
+      player.src = '';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
+  }
+
+  /* ==========================================================
+     13. IMAGE GALLERY MODAL (products.html)
+     ========================================================== */
+  function initImageGallery() {
+    var modal    = document.getElementById('gallery-modal');
+    if (!modal) return;
+
+    var imgEl    = modal.querySelector('.gallery-img');
+    var counter  = modal.querySelector('.gallery-counter');
+    var prevBtn  = modal.querySelector('.gallery-prev');
+    var nextBtn  = modal.querySelector('.gallery-next');
+    var closeBtn = modal.querySelector('.gallery-close');
+    var backdrop = modal.querySelector('.gallery-backdrop');
+
+    var images  = [];
+    var current = 0;
+
+    function showImage(index) {
+      current = index;
+      imgEl.src = images[current];
+      counter.textContent = 'Image ' + (current + 1) + ' of ' + images.length;
+      prevBtn.disabled = (current === 0);
+      nextBtn.disabled = (current === images.length - 1);
+    }
+
+    document.querySelectorAll('.product-image:has(.product-photo[data-gallery])').forEach(function (container) {
+      var productImg = container.querySelector('.product-photo[data-gallery]');
+      container.style.cursor = 'pointer';
+      container.addEventListener('click', function () {
+        images = productImg.getAttribute('data-gallery').split(',').map(function (s) { return s.trim(); });
+        showImage(0);
+        modal.classList.add('is-open');
+        document.body.classList.add('no-scroll');
+      });
+    });
+
+    function closeGallery() {
+      modal.classList.remove('is-open');
+      document.body.classList.remove('no-scroll');
+    }
+
+    prevBtn.addEventListener('click', function () { if (current > 0) showImage(current - 1); });
+    nextBtn.addEventListener('click', function () { if (current < images.length - 1) showImage(current + 1); });
+    closeBtn.addEventListener('click', closeGallery);
+    backdrop.addEventListener('click', closeGallery);
+    document.addEventListener('keydown', function (e) {
+      if (!modal.classList.contains('is-open')) return;
+      if (e.key === 'Escape') closeGallery();
+      if (e.key === 'ArrowLeft' && current > 0) showImage(current - 1);
+      if (e.key === 'ArrowRight' && current < images.length - 1) showImage(current + 1);
+    });
+  }
+
+  /* ==========================================================
      INITIALISE EVERYTHING
      ========================================================== */
   initMobileNav();
@@ -457,5 +540,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initSmoothScroll();
   initBackToTop();
   initLazyImages();
+  initVideoModal();
+  initImageGallery();
 
 });

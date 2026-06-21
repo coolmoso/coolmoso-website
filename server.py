@@ -13,6 +13,8 @@ Then open http://localhost:3000 in your browser.
 import http.server
 import json
 import os
+import signal
+import subprocess
 import sys
 import socketserver
 from datetime import datetime
@@ -39,6 +41,19 @@ class LivHeartHandler(http.server.SimpleHTTPRequestHandler):
             self.send_error(404, 'Not Found')
 
     def do_GET(self):
+        # Serve resource files from project root resource folder
+        if self.path.startswith('/resource/'):
+            resource_path = self.path[len('/resource/'):]
+            full_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resource', resource_path)
+            if os.path.exists(full_path) and os.path.isfile(full_path):
+                with open(full_path, 'rb') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-Type', self.guess_type(full_path))
+                self.send_header('Content-Length', str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+                return
         # API: return all feedback as JSON
         if self.path == '/api/feedback':
             self._handle_get_feedback()
@@ -140,7 +155,43 @@ class ReusableTCPServer(socketserver.TCPServer):
     allow_reuse_address = True
 
 
+def kill_port(port):
+    """Kill any process currently listening on the given port."""
+    killed = False
+    if sys.platform == 'win32':
+        try:
+            result = subprocess.check_output(
+                ['netstat', '-ano'],
+                stderr=subprocess.DEVNULL
+            ).decode()
+            for line in result.splitlines():
+                if ':{} '.format(port) in line and 'LISTENING' in line:
+                    pid = line.strip().split()[-1]
+                    subprocess.call(['taskkill', '/PID', pid, '/F'],
+                                    stdout=subprocess.DEVNULL,
+                                    stderr=subprocess.DEVNULL)
+                    print("  Killed existing process on port {} (PID {})".format(port, pid))
+                    killed = True
+        except Exception:
+            pass
+    else:
+        try:
+            result = subprocess.check_output(
+                ['lsof', '-ti', ':{}'.format(port)],
+                stderr=subprocess.DEVNULL
+            ).decode().strip()
+            if result:
+                for pid in result.splitlines():
+                    os.kill(int(pid), signal.SIGKILL)
+                    print("  Killed existing process on port {} (PID {})".format(port, pid))
+                    killed = True
+        except Exception:
+            pass
+    return killed
+
+
 def main():
+    kill_port(PORT)
     print("")
     print("  LivHeart Website Server")
     print("  Running at: http://localhost:{}".format(PORT))
