@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HAM Hamster Series - CoolMoso</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .news-article {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .news-article-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .news-article-tag {
+      display: inline-block;
+      padding: 0.25rem 0.85rem;
+      background: var(--color-primary-bg);
+      color: var(--color-primary-dark);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semibold);
+      letter-spacing: var(--letter-spacing-wide);
+      text-transform: uppercase;
+    }
+    .news-article-date {
+      font-size: var(--fs-sm);
+      color: var(--color-text-light);
+    }
+    .news-article-title {
+      font-size: var(--fs-2xl);
+      font-weight: var(--fw-semibold);
+      color: var(--color-heading);
+      line-height: var(--line-height-tight);
+      margin-bottom: 1.75rem;
+    }
+    .news-article-body {
+      font-size: var(--fs-md);
+      color: var(--color-text);
+      line-height: 1.9;
+      margin-bottom: 3rem;
+    }
+    .news-article-body p + p {
+      margin-top: 1.25rem;
+    }
+    .news-article-divider {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 2.5rem 0;
+    }
+    .news-gallery-heading {
+      font-size: var(--fs-xl);
+      font-weight: var(--fw-semibold);
+      color: var(--color-heading);
+      margin-bottom: 0.5rem;
+    }
+    .news-gallery-subheading {
+      font-size: var(--fs-sm);
+      color: var(--color-text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .news-photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 640px) {
+      .news-photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .news-article-title {
+        font-size: var(--fs-xl);
+      }
+    }
+    .news-photo-item {
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      background: var(--color-bg-alt);
+      aspect-ratio: 4 / 3;
+    }
+    .news-gallery-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform var(--duration-normal) var(--ease-default), opacity var(--duration-normal) var(--ease-default);
+      display: block;
+    }
+    .news-gallery-thumb:hover {
+      transform: scale(1.06);
+      opacity: 0.9;
+    }
+    .news-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 2.5rem;
+      padding: 0.6rem 1.4rem;
+      border: 1.5px solid var(--color-primary);
+      border-radius: var(--radius-full);
+      color: var(--color-primary-dark);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      transition: background var(--duration-normal) var(--ease-default), color var(--duration-normal) var(--ease-default);
+    }
+    .news-back-link:hover {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    /* ---- News Lightbox ---- */
+    .news-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-modal);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .news-lightbox.is-open {
+      display: flex;
+    }
+    .news-lightbox-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      cursor: pointer;
+    }
+    .news-lightbox-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .news-lightbox-img {
+      max-width: 88vw;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-xl);
+      display: block;
+    }
+    .news-lightbox-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .news-lightbox-counter {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: var(--fs-sm);
+      min-width: 90px;
+      text-align: center;
+    }
+    .nlb-btn {
+      padding: 0.45rem 1.1rem;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-default);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .nlb-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.28);
+    }
+    .nlb-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    .nlb-btn-close {
+      background: rgba(232, 131, 124, 0.6);
+      border-color: rgba(232, 131, 124, 0.8);
+    }
+    .nlb-btn-close:hover {
+      background: var(--color-primary) !important;
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-text">CoolMoso</span>
+        <span class="logo-subtitle">リブハート</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-menu" id="navMenu">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="index.html"><span class="nav-en">HOME</span><span class="nav-sub">ホーム</span></a></li>
+          <li class="nav-item"><a href="brand.html"><span class="nav-en">BRAND</span><span class="nav-sub">Brand Introduction</span></a></li>
+          <li class="nav-item"><a href="products.html"><span class="nav-en">PRODUCTS</span><span class="nav-sub">Product Gallery</span></a></li>
+          <li class="nav-item"><a href="store-locator.html"><span class="nav-en">STORES</span><span class="nav-sub">Store Locator</span></a></li>
+          <li class="nav-item"><a href="cooperation.html"><span class="nav-en">COOPERATION</span><span class="nav-sub">Business Partners</span></a></li>
+          <li class="nav-item active"><a href="news.html"><span class="nav-en">NEWS</span><span class="nav-sub">Latest Updates</span></a></li>
+          <li class="nav-item"><a href="feedback.html"><span class="nav-en">FEEDBACK</span><span class="nav-sub">Contact Us</span></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-banner">
+    <div class="container">
+      <h1 class="page-banner-title">HAM Hamster Series</h1>
+      <p class="page-banner-subtitle">ハムスターシリーズ</p>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> <span>&gt;</span>
+        <a href="news.html">News</a> <span>&gt;</span>
+        <span>HAM Hamster Series</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <article class="news-article">
+
+        <div class="news-article-meta animate-on-scroll">
+          <span class="news-article-tag">Product Launch</span>
+          <time class="news-article-date" datetime="2026-04-07">April 7, 2026</time>
+        </div>
+
+        <h1 class="news-article-title animate-on-scroll">
+          HAM Hamster Series Cute Launch!
+        </h1>
+
+        <div class="news-article-body animate-on-scroll">
+          <p>
+            We are thrilled to announce the official launch of our brand-new <strong>HAM Hamster Series</strong> — the cutest addition to the CoolMoso family yet! Inspired by the endearing charm of real hamsters, every plush in this collection captures those signature chubby cheeks, tiny paws, and bright, curious eyes that make you want to squeeze them all day long.
+          </p>
+          <p>
+            Each HAM Hamster is crafted from our premium ultra-soft short-pile fabric, making them incredibly huggable while remaining gentle on skin. The collection features five distinct hamster characters, each with their own unique colour palette and personality — from the rosy-cheeked <em>Cotton Candy Ham</em> to the sleepy <em>Midnight Bun</em> curled up in a cozy little ball.
+          </p>
+          <p>
+            The HAM series is available in three sizes: Mini (15 cm), Standard (25 cm), and Jumbo (40 cm), so there is a perfect companion for every shelf, desk, or cuddle session. Special limited-edition gift sets are also available, paired with a collectible mini sticker sheet and a hand-written character profile card.
+          </p>
+          <p>
+            Whether you are a lifelong plush collector or simply looking for the perfect heartfelt gift, the HAM Hamster Series is sure to bring warmth and smiles. Visit your nearest CoolMoso store or check our online channels to get yours before they sell out!
+          </p>
+        </div>
+
+        <hr class="news-article-divider">
+
+        <h2 class="news-gallery-heading animate-on-scroll">Photo Gallery</h2>
+        <p class="news-gallery-subheading animate-on-scroll">Click any image to view full size</p>
+
+        <div class="news-photo-grid">
+          <div class="news-photo-item animate-on-scroll">
+            <img
+              class="news-gallery-thumb"
+              src="/resource/bear_1.jpg"
+              alt="HAM Hamster Series — Product Shot 1"
+            />
+          </div>
+          <div class="news-photo-item animate-on-scroll">
+            <img
+              class="news-gallery-thumb"
+              src="/resource/bear_1.1.webp"
+              alt="HAM Hamster Series — Product Shot 2"
+            />
+          </div>
+          <div class="news-photo-item animate-on-scroll">
+            <img
+              class="news-gallery-thumb"
+              src="/resource/bear_1.2.webp"
+              alt="HAM Hamster Series — Product Shot 3"
+            />
+          </div>
+          <div class="news-photo-item animate-on-scroll">
+            <img
+              class="news-gallery-thumb"
+              src="/resource/cat_1.jpg"
+              alt="HAM Hamster Series — Lifestyle Shot 1"
+            />
+          </div>
+          <div class="news-photo-item animate-on-scroll">
+            <img
+              class="news-gallery-thumb"
+              src="/resource/cat_2.webp"
+              alt="HAM Hamster Series — Lifestyle Shot 2"
+            />
+          </div>
+          <div class="news-photo-item animate-on-scroll">
+            <img
+              class="news-gallery-thumb"
+              src="/resource/family.jpg"
+              alt="HAM Hamster Series — Full Family"
+            />
+          </div>
+        </div>
+
+        <a href="news.html" class="news-back-link animate-on-scroll">← Back to News</a>
+
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo">CoolMoso</span>
+        <p class="footer-tagline">Soft Living, Happy Heart</p>
+      </div>
+      <div class="footer-links">
+        <ul>
+          <li><a href="brand.html">About Us</a></li>
+          <li><a href="feedback.html">Contact Us</a></li>
+          <li><a href="cooperation.html">Join Us</a></li>
+          <li><a href="store-locator.html">Store Locator</a></li>
+        </ul>
+      </div>
+      <div class="footer-social">
+        <span>Follow Us</span>
+        <div class="social-icons">
+          <a href="#" class="social-icon" title="Weibo">微博</a>
+          <a href="#" class="social-icon" title="WeChat">微信</a>
+          <a href="#" class="social-icon" title="Instagram">Ins</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2025 CoolMoso Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+  <!-- News article lightbox (independent from products.html gallery modal) -->
+  <div id="news-lightbox" class="news-lightbox" role="dialog" aria-modal="true" aria-label="Image Lightbox">
+    <div class="news-lightbox-backdrop"></div>
+    <div class="news-lightbox-container">
+      <img class="news-lightbox-img" src="" alt="" />
+      <div class="news-lightbox-bar">
+        <button class="nlb-btn" id="nlb-prev" aria-label="Previous image">&#8592; PREV</button>
+        <span class="news-lightbox-counter" id="nlb-counter">1 of 6</span>
+        <button class="nlb-btn" id="nlb-next" aria-label="Next image">NEXT &#8594;</button>
+        <button class="nlb-btn nlb-btn-close" id="nlb-close" aria-label="Close lightbox">&#x2715; CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var lightbox  = document.getElementById('news-lightbox');
+      var lbImg     = lightbox.querySelector('.news-lightbox-img');
+      var lbCounter = document.getElementById('nlb-counter');
+      var lbPrev    = document.getElementById('nlb-prev');
+      var lbNext    = document.getElementById('nlb-next');
+      var lbClose   = document.getElementById('nlb-close');
+      var lbBackdrop = lightbox.querySelector('.news-lightbox-backdrop');
+
+      var thumbs  = document.querySelectorAll('.news-gallery-thumb');
+      var images  = Array.from(thumbs).map(function (img) { return img.getAttribute('src'); });
+      var alts    = Array.from(thumbs).map(function (img) { return img.getAttribute('alt') || ''; });
+      var current = 0;
+
+      function showImage(index) {
+        current       = index;
+        lbImg.src     = images[current];
+        lbImg.alt     = alts[current];
+        lbCounter.textContent = 'Image ' + (current + 1) + ' of ' + images.length;
+        lbPrev.disabled = (current === 0);
+        lbNext.disabled = (current === images.length - 1);
+      }
+
+      thumbs.forEach(function (thumb, i) {
+        thumb.addEventListener('click', function () {
+          showImage(i);
+          lightbox.classList.add('is-open');
+          document.body.classList.add('no-scroll');
+        });
+      });
+
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        document.body.classList.remove('no-scroll');
+      }
+
+      lbPrev.addEventListener('click', function () { if (current > 0) showImage(current - 1); });
+      lbNext.addEventListener('click', function () { if (current < images.length - 1) showImage(current + 1); });
+      lbClose.addEventListener('click', closeLightbox);
+      lbBackdrop.addEventListener('click', closeLightbox);
+
+      document.addEventListener('keydown', function (e) {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (e.key === 'Escape')      closeLightbox();
+        if (e.key === 'ArrowLeft'  && current > 0)                showImage(current - 1);
+        if (e.key === 'ArrowRight' && current < images.length - 1) showImage(current + 1);
+      });
+    });
+  </script>
+</body>
+</html>

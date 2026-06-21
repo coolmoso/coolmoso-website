@@ -1,5 +1,5 @@
 """
-LivHeart Website - Local Development Server
+CoolMoso Website - Local Development Server
 Cross-platform (Windows / Linux / macOS)
 No external dependencies required - uses Python standard library only.
 
@@ -28,7 +28,7 @@ DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 os.makedirs(DATA_DIR, exist_ok=True)
 
 
-class LivHeartHandler(http.server.SimpleHTTPRequestHandler):
+class CoolMosoHandler(http.server.SimpleHTTPRequestHandler):
     """Custom handler that serves static files and handles API requests."""
 
     def __init__(self, *args, **kwargs):
@@ -193,12 +193,12 @@ def kill_port(port):
 def main():
     kill_port(PORT)
     print("")
-    print("  LivHeart Website Server")
+    print("  CoolMoso Website Server")
     print("  Running at: http://localhost:{}".format(PORT))
     print("  Press Ctrl+C to stop")
     print("")
 
-    with ReusableTCPServer(("", PORT), LivHeartHandler) as httpd:
+    with ReusableTCPServer(("", PORT), CoolMosoHandler) as httpd:
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:

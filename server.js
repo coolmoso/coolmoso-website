@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/resource', express.static(path.join(__dirname, 'resource')));
 
 // Ensure data directory exists
 const dataDir = path.join(__dirname, 'data');
@@ -78,7 +79,7 @@ app.listen(PORT, () => {
   console.log(`
   ╔═══════════════════════════════════════════════╗
   ║                                               ║
-  ║   LivHeart Website Server                     ║
+  ║   CoolMoso Website Server                     ║
   ║   Running at: http://localhost:${PORT}           ║
   ║                                               ║
   ║   Press Ctrl+C to stop                        ║

@@ -1,4 +1,4 @@
-# LivHeart Website
+# CoolMoso Website
 
 A website for a Japanese plush toy lifestyle brand, inspired by [livheart.cn](http://www.livheart.cn/). Built with pure HTML, CSS, and JavaScript -- no frameworks required.
 

@@ -1,7 +1,7 @@
 {
   "name": "livheart-website",
   "version": "1.0.0",
-  "description": "LivHeart-style plush toy brand website",
+  "description": "CoolMoso-style plush toy brand website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
