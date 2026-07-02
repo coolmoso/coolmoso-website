@@ -1,6 +1,6 @@
 /* ============================================================
-   LIVHEART Website — Main Stylesheet
-   A clean, soft, cute aesthetic inspired by livheart.cn
+   COOLMOSO Website — Main Stylesheet
+   A clean, soft, cute aesthetic inspired by coolmoso.cn
    Japanese plush-toy lifestyle brand
    ============================================================ */
 
@@ -2809,7 +2809,7 @@ body.nav-open {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   height: 100%;
   text-decoration: none;
@@ -2825,7 +2825,7 @@ body.nav-open {
 }
 
 .logo .logo-subtitle {
-  font-size: var(--fs-xs);
+  font-size: var(--fs-lg);
   color: var(--color-text-muted);
   letter-spacing: 0.06em;
 }
@@ -3058,6 +3058,35 @@ body.no-scroll {
 .ip-card:hover .ip-circle {
   transform: scale(1.08);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ip-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+  transition: transform var(--duration-normal) var(--ease-default),
+              box-shadow var(--duration-normal) var(--ease-default);
+}
+
+.ip-card:hover .ip-avatar {
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ip-emoji {
+  font-size: 3rem;
+}
+
+.ip-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .ip-name {
@@ -3334,6 +3363,110 @@ body.no-scroll {
 .map-placeholder p {
   font-size: var(--fs-sm);
   color: var(--color-text-muted);
+}
+
+.map-placeholder.map-embed {
+  padding: 0;
+  overflow: hidden;
+}
+
+.store-map-frame {
+  width: 100%;
+  min-height: 420px;
+  border: 0;
+  display: block;
+}
+
+.store-detail-panel {
+  align-items: center;
+  justify-content: center;
+}
+
+.store-detail-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.store-detail-empty .store-detail-pin {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+.store-detail-info {
+  padding: var(--space-xl);
+  width: 100%;
+}
+
+.store-detail-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.store-detail-pin {
+  font-size: 2.5rem;
+}
+
+.store-detail-name {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  color: var(--color-heading);
+}
+
+.store-detail-address {
+  font-size: var(--fs-md);
+  color: var(--color-text-light);
+  margin-bottom: var(--space-xs);
+}
+
+.store-detail-meta {
+  font-size: var(--fs-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xxs);
+}
+
+.store-detail-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.map-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-default);
+}
+
+.map-link-btn:hover {
+  transform: translateY(-2px);
+}
+
+.amap-btn {
+  background-color: #00b2f7;
+  color: #fff;
+}
+
+.amap-btn:hover {
+  background-color: #009dd4;
+}
+
+.gmap-btn {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+.gmap-btn:hover {
+  background-color: var(--color-primary-dark);
 }
 
 .store-grid {

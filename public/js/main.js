@@ -1,5 +1,5 @@
 /**
- * Livheart Website – Main JavaScript
+ * Coolmoso Website – Main JavaScript
  * Vanilla JS, no frameworks. Modular structure.
  */
 
@@ -166,40 +166,49 @@ document.addEventListener('DOMContentLoaded', function () {
     var products   = document.querySelectorAll('.product-card[data-category]');
     if (categories.length === 0 || products.length === 0) return;
 
+    function applyFilter(selected) {
+      // Update active state
+      categories.forEach(function (c) {
+        c.classList.toggle('active', c.getAttribute('data-category') === selected);
+      });
+
+      // Filter products
+      products.forEach(function (card) {
+        var match = (selected === 'all') ||
+                    (card.getAttribute('data-category') === selected);
+
+        if (match) {
+          card.style.display = '';
+          // Trigger reflow then animate in
+          requestAnimationFrame(function () {
+            card.classList.add('visible');
+            card.classList.remove('hidden');
+          });
+        } else {
+          card.style.display = 'none';
+          card.classList.add('hidden');
+          card.classList.remove('visible');
+        }
+      });
+    }
+
     categories.forEach(function (cat) {
       cat.addEventListener('click', function (e) {
         e.preventDefault();
-        var selected = cat.getAttribute('data-category');
-
-        // Update active state
-        categories.forEach(function (c) { c.classList.remove('active'); });
-        cat.classList.add('active');
-
-        // Filter products
-        products.forEach(function (card) {
-          var match = (selected === 'all') ||
-                      (card.getAttribute('data-category') === selected);
-
-          if (match) {
-            card.style.display = '';
-            // Trigger reflow then animate in
-            requestAnimationFrame(function () {
-              card.classList.add('visible');
-              card.classList.remove('hidden');
-            });
-          } else {
-            card.style.display = 'none';
-            card.classList.add('hidden');
-            card.classList.remove('visible');
-          }
-        });
+        applyFilter(cat.getAttribute('data-category'));
       });
     });
 
-    // Show all on load
-    products.forEach(function (card) {
-      card.classList.add('visible');
-    });
+    // Apply category from URL (?category=...) on load, else show all
+    var requested = new URLSearchParams(window.location.search).get('category');
+    var hasRequested = requested && document.querySelector('.category-item[data-category="' + requested + '"]');
+    if (hasRequested) {
+      applyFilter(requested);
+    } else {
+      products.forEach(function (card) {
+        card.classList.add('visible');
+      });
+    }
   }
 
   /* ==========================================================
@@ -365,6 +374,49 @@ document.addEventListener('DOMContentLoaded', function () {
         var match = !query || name.indexOf(query) !== -1 || address.indexOf(query) !== -1;
         card.style.display = match ? '' : 'none';
       });
+    });
+  }
+
+  /* ==========================================================
+     8b. STORE LOCATOR MAP (store-locator.html)
+     ========================================================== */
+  function initStoreMap() {
+    var panel = document.getElementById('store-detail');
+    var grid  = document.querySelector('.store-grid');
+    if (!panel || !grid) return;
+
+    grid.addEventListener('click', function (e) {
+      var card = e.target.closest('.store-card');
+      if (!card) return;
+
+      var name     = card.getAttribute('data-name')    || '';
+      var address  = card.getAttribute('data-address') || '';
+      var phoneEl  = card.querySelector('.store-phone');
+      var hoursEl  = card.querySelector('.store-hours');
+      var phone    = phoneEl ? phoneEl.textContent.trim() : '';
+      var hours    = hoursEl ? hoursEl.textContent.trim() : '';
+      var query    = (name + ' ' + address).trim();
+      var amapUrl  = 'https://uri.amap.com/search?keyword=' + encodeURIComponent(query);
+      var gmapUrl  = 'https://www.google.com/maps/search/?q=' + encodeURIComponent(query);
+
+      panel.innerHTML =
+        '<div class="store-detail-info">' +
+          '<div class="store-detail-header">' +
+            '<span class="store-detail-pin">📍</span>' +
+            '<h3 class="store-detail-name">' + name + '</h3>' +
+          '</div>' +
+          '<p class="store-detail-address">' + address + '</p>' +
+          (phone ? '<p class="store-detail-meta">' + phone + '</p>' : '') +
+          (hours ? '<p class="store-detail-meta">' + hours + '</p>' : '') +
+          '<div class="store-detail-actions">' +
+            '<a href="' + amapUrl + '" target="_blank" rel="noopener" class="map-link-btn amap-btn">🗺 高德地图 AMap</a>' +
+            '<a href="' + gmapUrl + '" target="_blank" rel="noopener" class="map-link-btn gmap-btn">🌍 Google Maps</a>' +
+          '</div>' +
+        '</div>';
+
+      grid.querySelectorAll('.store-card').forEach(function (c) { c.classList.remove('is-active'); });
+      card.classList.add('is-active');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
   }
 
@@ -537,6 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initLoadMore();
   initFeedbackForm();
   initStoreSearch();
+  initStoreMap();
   initSmoothScroll();
   initBackToTop();
   initLazyImages();
