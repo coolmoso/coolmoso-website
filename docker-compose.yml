@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    image: coolmoso-website:latest
+    container_name: coolmoso-website
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+    volumes:
+      # Persist feedback submissions on the host
+      - ./data:/app/data
+    restart: unless-stopped
